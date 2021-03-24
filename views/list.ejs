@@ -8,9 +8,14 @@
 </head>
 
 <body>
-  <h1>
-    It's a <%=kindOfDay%>!
-  </h1>
+
+  <%  if(kindOfDay === "Saturday" || kindOfDay == "Sunday"){ %>
+      <h1 style="color: pink"><%=kindOfDay%> ToDo List</h1>
+  <%  } else { %>
+      <h1 style="color: coral"><%=kindOfDay%> ToDo List</h1>
+  <%  } %>
+
+
   <p>
     Why aren't you working
   </p>
