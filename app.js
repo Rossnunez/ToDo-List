@@ -34,6 +34,13 @@ const task3 = new Task ({
 
 const defaultTasks = [task1, task2, task3];
 
+const listSchema = {
+  name: String,
+  tasks: [taskSchema]
+};
+
+const List = mongoose.model("List", listSchema);
+
 //add default task if there are no task in the list
 app.get("/", function(req, res){
   Task.find({}, function(err, foundItems){
@@ -52,6 +59,17 @@ app.get("/", function(req, res){
   });
 });
 
+app.get("/:customListName", function(req, res){
+  const customListName = req.params.customListName;
+
+  const list = new List({
+    name: customListName,
+    tasks: defaultTasks
+  });
+
+  list.save();
+});
+
 //insert tasks method
 app.post("/", function(req, res){
   const itemName = req.body.newItem;
@@ -65,6 +83,8 @@ app.post("/", function(req, res){
   res.redirect("/");
 
 });
+
+
 
 //checked and delete task method
 app.post("/delete", function(req, res){
