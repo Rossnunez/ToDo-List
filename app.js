@@ -2,6 +2,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const { JSDOM } = require( "jsdom" );
+const { window } = new JSDOM( "" );
+
 const app = express();
 
 let items = ["Buy Food", "Cook Food", "Eat em"];
@@ -14,14 +17,13 @@ app.set('view engine', 'ejs');
 app.get("/", function(req, res){
 
   let today = new Date();
-
   let options = {
    weekday: "long",
    day: "numeric",
    month: "long"
  };
 
- let day = today.toLocaleDateString("en-US", options);
+  let day = today.toLocaleDateString("en-US", options);
   res.render("list", {kindOfDay: day, newListItems: items});
 });
 
@@ -30,6 +32,7 @@ app.post("/", function(req, res){
   items.push(item);
   res.redirect("/");
 });
+
 
 app.listen(3000, function(){
   console.log("Server started on port 3000");
