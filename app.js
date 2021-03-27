@@ -62,12 +62,25 @@ app.get("/", function(req, res){
 app.get("/:customListName", function(req, res){
   const customListName = req.params.customListName;
 
-  const list = new List({
-    name: customListName,
-    tasks: defaultTasks
+  List.findOne({name: customListName}, function(err, foundList){
+    if(!err){
+      if(!foundList){
+        //creating a new list
+        const list = new List({
+          name: customListName,
+          tasks: defaultTasks
+        });
+
+        list.save();
+        res.redirect("/" + customListName);
+      } else {
+        //show the existing list
+        res.render("list", {kindOfDay: foundList.name, newListItems: foundList.tasks});
+      }
+    }
   });
 
-  list.save();
+
 });
 
 //insert tasks method
