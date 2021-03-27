@@ -22,7 +22,7 @@
 
       <%    newListItems.forEach(function(taskitem){ %>
         <div class="item">
-        <input type="checkbox">
+        <input name="checkbox" type="checkbox" onChange="this.form.submit()" value="<%=taskitem._id%>">
         <p><%=taskitem.task%></p>
         </div>
       <%    })  %>
