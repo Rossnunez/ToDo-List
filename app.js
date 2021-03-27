@@ -5,8 +5,6 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-let items = ["Buy Food", "Cook Food", "Eat em"];
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
@@ -37,25 +35,47 @@ const task3 = new Task ({
 
 const defaultTasks = [task1, task2, task3];
 
-Task.insertMany(defaultTasks, function(err){
-  if(err){
-    console.log(err);
-  } else {
-    console.log("Default task were added successfully");
-  }
-});
+// Task.insertMany(defaultTasks, function(err){
+//   if(err){
+//     console.log(err);
+//   } else {
+//     console.log("Default task were added successfully");
+//   }
+// });
+
 
 app.get("/", function(req, res){
 
-  res.render("list", {kindOfDay: "Today", newListItems: items});
+  Task.find({}, function(err, foundItems){
+
+    if(foundItems.length == 0){
+      Task.insertMany(defaultTasks, function(err){
+        if(err){
+          console.log(err);
+        } else {
+          console.log("Default task were added successfully");
+        }
+        res.direct("/");
+      });
+    } else {
+      res.render("list", {kindOfDay: "Today", newListItems: foundItems});
+    }
+  });
 
 });
 
 
 app.post("/", function(req, res){
-  let item = req.body.newItem;
-  items.push(item);
+  const itemName = req.body.newItem;
+
+  const newTask = new Task({
+    task: itemName
+  });
+
+  newTask.save();
+
   res.redirect("/");
+
 });
 
 

@@ -17,12 +17,17 @@
   </div>
 
   <div class="box">
-    <%  for(var i = 0; i < newListItems.length; i++){ %>
+
+    <form action="/delete" method="post">
+
+      <%    newListItems.forEach(function(taskitem){ %>
         <div class="item">
-          <input type="checkbox">
-        <p> <%=newListItems[i]%> </p>
+        <input type="checkbox">
+        <p><%=taskitem.task%></p>
         </div>
-    <%  } %>
+      <%    })  %>
+
+    </form>
 
 
   <form class="item" action="/" method="post">
