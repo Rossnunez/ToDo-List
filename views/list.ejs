@@ -18,16 +18,17 @@
 
   <div class="box">
 
+
     <form action="/delete" method="post">
       <%    newListItems.forEach(function(taskitem){ %>
         <div class="item">
         <input name="checkbox" type="checkbox" onChange="this.form.submit()" value="<%=taskitem._id%>">
         <p><%=taskitem.task%></p>
         </div>
-        <input type="hidden" name="listName" value="<%= listTitle %>"></input>
-        </form>
-      <%    })  %>
 
+          <% }) %>
+          <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+        </form>
 
 
   <form class="item" action="/" method="post">

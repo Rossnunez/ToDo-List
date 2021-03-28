@@ -12,6 +12,8 @@ mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true,
 
 app.set('view engine', 'ejs');
 
+mongoose.set('useFindAndModify', false);
+
 const taskSchema = new mongoose.Schema({
   task: {
     type: String,
@@ -44,15 +46,15 @@ const List = mongoose.model("List", listSchema);
 //add default task if there are no task in the list
 app.get("/", function(req, res){
   Task.find({}, function(err, foundItems){
-    if(foundItems.length == 0){
+    if(foundItems.length === 0){
       Task.insertMany(defaultTasks, function(err){
         if(err){
           console.log(err);
         } else {
           console.log("Default task were added successfully");
         }
-        res.direct("/");
       });
+      res.direct("/");
     } else {
       res.render("list", {listTitle: "Today", newListItems: foundItems});
     }
@@ -105,13 +107,11 @@ app.post("/", function(req, res){
   }
 });
 
-
-
 //checked and delete task method
 app.post("/delete", function(req, res){
   const checkedTaskId = req.body.checkbox;
   const listName = req.body.listName;
-
+  console.log(listName);
   if(listName === "Today"){
     Task.findByIdAndRemove(checkedTaskId, function(err){
       if(err){
