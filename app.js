@@ -66,22 +66,22 @@ app.get("/:customListName", function(req, res){
   List.findOne({name: customListName}, function(err, foundList){
     if(!err){
       if(!foundList){
+
         //creating a new list
         const list = new List({
           name: customListName,
           tasks: defaultTasks
         });
 
-        list.save();
-        res.redirect("/" + customListName);
+        list.save(() => res.redirect("/" + customListName));
+        // res.redirect("/" + customListName);
       } else {
+
         //show the existing list
         res.render("list", {listTitle: foundList.name, newListItems: foundList.tasks});
       }
     }
   });
-
-
 });
 
 //insert tasks method
@@ -110,14 +110,26 @@ app.post("/", function(req, res){
 //checked and delete task method
 app.post("/delete", function(req, res){
   const checkedTaskId = req.body.checkbox;
-  Task.findByIdAndRemove(checkedTaskId, function(err){
-    if(err){
-      console.log(err);
-    } else {
-      console.log("Task completed and deleted.");
-      res.redirect("/");
-    }
-  });
+  const listName = req.body.listName;
+
+  if(listName === "Today"){
+    Task.findByIdAndRemove(checkedTaskId, function(err){
+      if(err){
+        console.log(err);
+      } else {
+        console.log("Task completed and deleted.");
+        res.redirect("/");
+      }
+    });
+  } else {
+    List.findOneAndUpdate({name: listName}, {$pull: {tasks: {_id: checkedTaskId}}}, function(err, foundList){
+      if(!err){
+        res.redirect("/" + listName);
+      } else {
+        console.log(err);
+      }
+    });
+  }
 });
 
 
