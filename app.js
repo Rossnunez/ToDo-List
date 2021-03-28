@@ -54,11 +54,12 @@ app.get("/", function(req, res){
         res.direct("/");
       });
     } else {
-      res.render("list", {kindOfDay: "Today", newListItems: foundItems});
+      res.render("list", {listTitle: "Today", newListItems: foundItems});
     }
   });
 });
 
+//
 app.get("/:customListName", function(req, res){
   const customListName = req.params.customListName;
 
@@ -75,7 +76,7 @@ app.get("/:customListName", function(req, res){
         res.redirect("/" + customListName);
       } else {
         //show the existing list
-        res.render("list", {kindOfDay: foundList.name, newListItems: foundList.tasks});
+        res.render("list", {listTitle: foundList.name, newListItems: foundList.tasks});
       }
     }
   });
@@ -85,16 +86,23 @@ app.get("/:customListName", function(req, res){
 
 //insert tasks method
 app.post("/", function(req, res){
-  const itemName = req.body.newItem;
+  const taskName = req.body.newTask;
+  const listName = req.body.list;
 
   const newTask = new Task({
-    task: itemName
+    task: taskName
   });
 
-  newTask.save();
-
-  res.redirect("/");
-
+  if(listName === "Today"){
+    newTask.save();
+    res.redirect("/");
+  } else {
+    List.findOne({name: listName}, function(err, foundList){
+      foundList.tasks.push(newTask);
+      foundList.save();
+      res.redirect("/" + listName);
+    });
+  }
 });
 
 
