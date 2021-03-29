@@ -46,26 +46,28 @@ const List = mongoose.model("List", listSchema);
 
 //add default task if there are no task in the list
 app.get("/", function(req, res){
-  Task.find({}, function(err, foundItems){
-    if(foundItems.length === 0){
-      Task.insertMany(defaultTasks, function(err){
-        if(err){
-          console.log(err);
-        } else {
-          console.log("Default task were added successfully");
-        }
+  List.find({}, function(err, foundLists){
+    Task.find({}, function(err, foundItems){
+      if(foundItems.length === 0){
+        Task.insertMany(defaultTasks, function(err){
+          if(err){
+            console.log(err);
+          } else {
+            console.log("Default task were added successfully");
+          }
+        });
+        res.redirect("/");
+      } else {
+        res.render("list", {listTitle: "Today", newListItems: foundItems, noList: foundLists});
+      }
       });
-      res.direct("/");
-    } else {
-      res.render("list", {listTitle: "Today", newListItems: foundItems});
-    }
   });
 });
 
 //
 app.get("/:customListName", function(req, res){
   const customListName = _.capitalize(req.params.customListName);
-
+  List.find({}, function(err, foundLists){
   List.findOne({name: customListName}, function(err, foundList){
     if(!err){
       if(!foundList){
@@ -81,9 +83,10 @@ app.get("/:customListName", function(req, res){
       } else {
 
         //show the existing list
-        res.render("list", {listTitle: foundList.name, newListItems: foundList.tasks});
+        res.render("list", {listTitle: foundList.name, newListItems: foundList.tasks, noList: foundLists});
       }
     }
+  });
   });
 });
 
