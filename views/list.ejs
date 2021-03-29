@@ -40,6 +40,9 @@
       </form>
     </div>
 
+
+
+
     <div class="box" id="heading">
       <h1>
         Custom Lists
@@ -48,12 +51,15 @@
 
       <div class="box">
 
-      <form action="/delete" method="post">
+      <form action="/deleteList" method="post">
+
         <div class="item">
-        <a href="/">Today</a>
+        <a href="/" class="firstAnchor" >Today</a>
         </div>
+
         <%    noList.forEach(function(listitem){ %>
         <div class="item">
+          <input name="checkbox" type="checkbox" onChange="this.form.submit()" value="<%=listitem._id%>">
           <a href="/<%=listitem.name%>"><%=listitem.name%></a>
         </div>
 

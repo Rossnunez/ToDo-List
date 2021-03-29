@@ -14,7 +14,7 @@ html {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: bottom;
-  bottom:-425px;
+  bottom:-465px;
   left:0;
   z-index: -1;
 }
@@ -66,6 +66,19 @@ p {
   font-size: 20px;
   font-weight: 200;
   color: #00204a;
+}
+
+a {
+  margin: 0;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 200;
+  color: #00204a;
+  padding-left: 120px;
+}
+
+.firstAnchor {
+  padding-left: 170px;
 }
 
 form.item {
