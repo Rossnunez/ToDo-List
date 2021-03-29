@@ -1,6 +1,6 @@
 # ToDo-List
 
-#Website uses Mongo DataBase to store Lists and tasks
+<p>Website uses Mongo DataBase to store Lists and tasks</p>
 #To create a task type into the textbar and select the '+' symbol
 #To remove a task press the checkbox next to the task you want to remove
 #To create a new list scroll down to the "Custom To Do List" table and type the list name into the textbar and select the '+' symbol
