@@ -6,10 +6,15 @@ const _ = require("lodash");
 
 const app = express();
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true,  useUnifiedTopology: true });
+mongoose.connect("mongodb://localhost:27017/todolistDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 app.set('view engine', 'ejs');
 
@@ -26,13 +31,13 @@ const Task = mongoose.model("Task", taskSchema);
 
 //creating default tasks and array to hold them
 const task1 = new Task({
-  task :  "Do the dishes"
+  task: "Do the dishes"
 });
-const task2 = new Task ({
-  task : "Wash the car"
+const task2 = new Task({
+  task: "Wash the car"
 });
-const task3 = new Task ({
-  task : "Buy some milk"
+const task3 = new Task({
+  task: "Buy some milk"
 });
 
 const defaultTasks = [task1, task2, task3];
@@ -45,12 +50,12 @@ const listSchema = {
 const List = mongoose.model("List", listSchema);
 
 //add default task if there are no task in the list
-app.get("/", function(req, res){
-  List.find({}, function(err, foundLists){
-    Task.find({}, function(err, foundItems){
-      if(foundItems.length === 0){
-        Task.insertMany(defaultTasks, function(err){
-          if(err){
+app.get("/", function(req, res) {
+  List.find({}, function(err, foundLists) {
+    Task.find({}, function(err, foundItems) {
+      if (foundItems.length === 0) {
+        Task.insertMany(defaultTasks, function(err) {
+          if (err) {
             console.log(err);
           } else {
             console.log("Default task were added successfully");
@@ -58,40 +63,50 @@ app.get("/", function(req, res){
         });
         res.redirect("/");
       } else {
-        res.render("list", {listTitle: "Today", newListItems: foundItems, noList: foundLists});
+        res.render("list", {
+          listTitle: "Today",
+          newListItems: foundItems,
+          noList: foundLists
+        });
       }
-      });
+    });
   });
 });
 
 //
-app.get("/:customListName", function(req, res){
+app.get("/:customListName", function(req, res) {
   const customListName = _.capitalize(req.params.customListName);
-  List.find({}, function(err, foundLists){
-  List.findOne({name: customListName}, function(err, foundList){
-    if(!err){
-      if(!foundList){
+  List.find({}, function(err, foundLists) {
+    List.findOne({
+      name: customListName
+    }, function(err, foundList) {
+      if (!err) {
+        if (!foundList) {
 
-        //creating a new list
-        const list = new List({
-          name: customListName,
-          tasks: defaultTasks
-        });
+          //creating a new list
+          const list = new List({
+            name: customListName,
+            tasks: defaultTasks
+          });
 
-        list.save(() => res.redirect("/" + customListName));
-        // res.redirect("/" + customListName);
-      } else {
+          list.save(() => res.redirect("/" + customListName));
+          // res.redirect("/" + customListName);
+        } else {
 
-        //show the existing list
-        res.render("list", {listTitle: foundList.name, newListItems: foundList.tasks, noList: foundLists});
+          //show the existing list
+          res.render("list", {
+            listTitle: foundList.name,
+            newListItems: foundList.tasks,
+            noList: foundLists
+          });
+        }
       }
-    }
-  });
+    });
   });
 });
 
 //insert tasks method
-app.post("/", function(req, res){
+app.post("/", function(req, res) {
   const taskName = req.body.newTask;
   const listName = req.body.list;
 
@@ -99,11 +114,13 @@ app.post("/", function(req, res){
     task: taskName
   });
 
-  if(listName === "Today"){
+  if (listName === "Today") {
     newTask.save();
     res.redirect("/");
   } else {
-    List.findOne({name: listName}, function(err, foundList){
+    List.findOne({
+      name: listName
+    }, function(err, foundList) {
       foundList.tasks.push(newTask);
       foundList.save();
       res.redirect("/" + listName);
@@ -111,14 +128,47 @@ app.post("/", function(req, res){
   }
 });
 
+app.post("/createList", function(req, res) {
+  const newListName = _.capitalize(req.body.newList);
+
+  List.find({}, function(err, foundLists) {
+    List.findOne({
+      name: newListName
+    }, function(err, foundList) {
+      if (!err) {
+        if (!foundList) {
+
+          //creating a new list
+          const list = new List({
+            name: newListName,
+            tasks: defaultTasks
+          });
+
+          list.save(() => res.redirect("/" + newListName));
+          // res.redirect("/" + customListName);
+        } else {
+
+          //show the existing list
+          res.render("list", {
+            listTitle: foundList.name,
+            newListItems: foundList.tasks,
+            noList: foundLists
+          });
+        }
+      }
+    });
+  });
+
+});
+
 //checked and delete task method
-app.post("/delete", function(req, res){
+app.post("/delete", function(req, res) {
   const checkedTaskId = req.body.checkbox;
   const listName = req.body.listName;
 
-  if(listName === "Today"){
-    Task.findByIdAndRemove(checkedTaskId, function(err){
-      if(err){
+  if (listName === "Today") {
+    Task.findByIdAndRemove(checkedTaskId, function(err) {
+      if (err) {
         console.log(err);
       } else {
         console.log("Task completed and deleted.");
@@ -126,8 +176,16 @@ app.post("/delete", function(req, res){
       }
     });
   } else {
-    List.findOneAndUpdate({name: listName}, {$pull: {tasks: {_id: checkedTaskId}}}, function(err, foundList){
-      if(!err){
+    List.findOneAndUpdate({
+      name: listName
+    }, {
+      $pull: {
+        tasks: {
+          _id: checkedTaskId
+        }
+      }
+    }, function(err, foundList) {
+      if (!err) {
         res.redirect("/" + listName);
       } else {
         console.log(err);
@@ -135,10 +193,11 @@ app.post("/delete", function(req, res){
     });
   }
 });
-app.post("/deleteList", function(req, res){
+
+app.post("/deleteList", function(req, res) {
   const checkedListId = req.body.checkbox;
-  List.findByIdAndRemove(checkedListId, function(err){
-    if(err){
+  List.findByIdAndRemove(checkedListId, function(err) {
+    if (err) {
       console.log(err);
     } else {
       console.log("List has been deleted");
@@ -148,6 +207,6 @@ app.post("/deleteList", function(req, res){
 });
 
 
-app.listen(3000, function(){
+app.listen(3000, function() {
   console.log("Server started on port 3000");
 });

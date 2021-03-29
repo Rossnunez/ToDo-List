@@ -21,7 +21,6 @@
 
     <div class="box">
 
-
       <form action="/delete" method="post">
         <%    newListItems.forEach(function(taskitem){ %>
         <div class="item">
@@ -41,8 +40,6 @@
     </div>
 
 
-
-
     <div class="box" id="heading">
       <h1>
         Custom Lists
@@ -50,7 +47,6 @@
     </div>
 
       <div class="box">
-
       <form action="/deleteList" method="post">
 
         <div class="item">
@@ -67,7 +63,10 @@
         <input type="hidden" name="listName" value="<%= listTitle %>"></input>
       </form>
 
-
+      <form class="item" action="/createList" method="post">
+        <input type="text" name="newList" placeholder="New List" autocomplete="off">
+        <button type="submit" name="list" value="<%= listTitle %>">+</button>
+      </form>
 
     </div>
 

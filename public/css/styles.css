@@ -14,7 +14,7 @@ html {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: bottom;
-  bottom:-465px;
+  top:0px;
   left:0;
   z-index: -1;
 }
@@ -29,7 +29,7 @@ h1 {
 .box {
   max-width: 400px;
   margin: 50px auto;
-  background: white;
+  background: #f7fbfc;
   border-radius: 5px;
   box-shadow: -10px 5px 15px -5px rgba(0, 0, 0, 0.3);
 }
