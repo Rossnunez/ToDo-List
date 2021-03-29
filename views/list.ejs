@@ -55,7 +55,7 @@
 
         <%    noList.forEach(function(listitem){ %>
         <div class="item">
-          <input name="checkbox" type="checkbox" onChange="this.form.submit()" value="<%=listitem._id%>">
+          <input class="checkbox2" name="checkbox" type="checkbox" onChange="this.form.submit()" value="<%=listitem._id%>">
           <a href="/<%=listitem.name%>"><%=listitem.name%></a>
         </div>
 

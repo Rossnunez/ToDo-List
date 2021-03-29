@@ -31,14 +31,11 @@ h1 {
   margin: 50px auto;
   background: #f7fbfc;
   border-radius: 5px;
-  /* box-shadow: -10px 5px 15px -5px rgba(0, 0, 0, 0.3); */
   box-shadow:
     3px 0 7px -3px rgba(0, 0, 0, 0.3),
     0 0 rgba(0, 0, 0, 0.3),
     5px 0 7px -3px rgba(0, 0, 0, 0.3),
     -5px 0 7px -3px rgba(0, 0, 0, 0.3);
-
-
 }
 
 #heading {
@@ -85,14 +82,16 @@ p {
   font-weight: 400;
 }
 
+.checkbox2:hover+a{
+  font-weight: 400;
+}
+
 a {
   margin: 20px 20px 20px 120px;
   padding: 0;
-  /* padding: 20px; */
   font-size: 20px;
   font-weight: 200;
   color: #00204a;
-  /* padding-left: 120px; */
   text-decoration: none;
   position: relative;
 }

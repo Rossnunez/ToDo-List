@@ -31,13 +31,13 @@ const Task = mongoose.model("Task", taskSchema);
 
 //creating default tasks and array to hold them
 const task1 = new Task({
-  task: "Do the dishes"
+  task: "Select '+' to create a new task"
 });
 const task2 = new Task({
-  task: "Wash the car"
+  task: "Press the checkbox to remove a task"
 });
 const task3 = new Task({
-  task: "Buy some milk"
+  task: "Create custom list through the url or the list below"
 });
 
 const defaultTasks = [task1, task2, task3];
