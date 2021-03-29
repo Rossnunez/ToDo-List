@@ -135,6 +135,17 @@ app.post("/delete", function(req, res){
     });
   }
 });
+app.post("/deleteList", function(req, res){
+  const checkedListId = req.body.checkbox;
+  List.findByIdAndRemove(checkedListId, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("List has been deleted");
+      res.redirect("/");
+    }
+  });
+});
 
 
 app.listen(3000, function(){
